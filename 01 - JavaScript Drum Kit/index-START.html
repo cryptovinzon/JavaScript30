@@ -59,6 +59,27 @@
 
 <script>
 
+function playSound(e){
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+  if(!audio) return; // if no data-key available, end
+  audio.currentTime = 0; // rewind to start to enable rapid key press
+  audio.play();
+  key.classList.add('playing'); // animate key with .playing selector
+}
+
+function removeTransition(e){
+  if (e.propertyName !== 'transform') return; // skip if not a transform
+  this.classList.remove('playing'); // 'this' references key passed through below
+}
+
+// for each key pressed, pass through function removeTranstion
+const keys = document.querySelectorAll('.key'); // nodelist for .key
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+// listen
+window.addEventListener('keydown', playSound);
+
 </script>
 
 
